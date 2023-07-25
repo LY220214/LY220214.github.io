@@ -4,9 +4,9 @@
     <meta charset = "UTF-8">
     <title>真正的石室祥云</title>
 </head>
-<script src = "lib/jquery-2.1.1.min.js"></script>
-<script src = "lib/thunder-link.js"></script>
-<script src = "lib/axios.min.js"></script>
+<script src = "/lib/assets/jquery-2.1.1.min.js"></script>
+<script src = "/lib/assets/thunder-link.js"></script>
+<script src = "/lib/assets/axios.min.js"></script>
 
 <body>
 <div id = "contain" style="text-align: center">
@@ -66,7 +66,6 @@
     <br />
     ppt和课后练习等资料：
     <button id = "download_ppt" disabled>下载</button>
-    
     <br />
     <br />
     <p style="text-align: left; font-size: 30px">说明:</p>
@@ -76,9 +75,11 @@
         <li>初中只有语数外物化五科，并且初二开始才有物理，初三开始才有化学</li>
         <li>除高一外，高中选择请注意文理科</li>
         <li>选择毕业年份时需谨慎，不能选择莫须有的课程（例如现在是2022年，却选择2024年毕业的高三课程）</li>
+        <li>该网站仅供技术讨论，非法用途后果自负</li>
     </ul>
 </div>
 <script>
+    let downloadGroupName = ''
     let info = {
         urls: [], pptUrls: [], pptId: null,
     }
@@ -89,8 +90,8 @@
     let download_ppt = document.getElementById('download_ppt');
     let msg = document.getElementById('msg');
     let btn = document.getElementById('btn');
-    
-    
+
+
     btn.addEventListener('click', event => {
         btn.disabled = true
         if (info.pptId != null || info.pptUrls.length !== 0 || info.urls.length !== 0) {
@@ -102,6 +103,7 @@
         msg.style.display = 'block';
         download_video.disabled = true
         download_ppt.disabled = true
+
         axios.post('http://www.cdssxy.com/cloud-wlxy-customer/courseResource/videos.action', {
             gradeTypeId: $('#gradeId').val() > 3 ? 3 : 2,
             subjectId: $('#subjectId').val(),
@@ -132,7 +134,7 @@
                     })
                 }
             }
-            
+
             await axios.post('http://www.cdssxy.com/cloud-wlxy-customer/resourcedocument/findAllByFkCourseAndFkSysDirtreeId.action', {
                 "fkSysDirtreeId": info.pptId
             }).then(res => {
@@ -163,21 +165,23 @@
             btn.disabled = false
         })
     })
-    
+
     download_ppt.addEventListener('click', event => {
         if (info.pptUrls.length === 0) alert('无资料数据')
         else f2(info.pptUrls)
     })
-    
+
     download_video.addEventListener('click', event => {
         if (info.urls.length === 0) alert('无视频数据')
-        else f2(info.urls)
+        else {
+            f2(info.urls)
+        }
     })
-    
+
     function f2(info) {
         thunderLink.newTask({
             downloadDir: 'cdssxy', // 指定批量任务的下载目录名称，迅雷会在用户剩余空间最大的磁盘根目录中创建这个目录。【若不填此项，会下载到用户默认下载目录】
-            taskGroupName: '', // 指定任务组名称，可将批量任务合并成类似BT任务的【任务组】，迅雷将在下载目录中创建同名子文件夹保存所有下载文件。【推荐填写。若不填此项，迅雷下载列表会显示所有本次创建的下载任务，可能会使用户的下载列表显得杂乱】
+            taskGroupName: '1', // 指定任务组名称，可将批量任务合并成类似BT任务的【任务组】，迅雷将在下载目录中创建同名子文件夹保存所有下载文件。【推荐填写。若不填此项，迅雷下载列表会显示所有本次创建的下载任务，可能会使用户的下载列表显得杂乱】
             excludePath: '', // 如果您希望批量下载的文件在用户本地保持与服务器上相同的文件目录结构，可以指定排除URL的前缀，迅雷会根据被排除前缀后的URL路径，创建文件夹保存对应的文件。【本项需配合taskGroupName使用，通常用于下载绿色版游戏或程序。若不填此项，将把所有文件都放置于同一层下载目录中】
             installFile: '', // 指定批量任务中的安装程序或主程序，该任务组下载完成后，用户在迅雷中双击此任务组，将运行指定的文件。该任务组的图标也将变成指定文件的图标。【本项需配合taskGroupName使用，通常用于下载绿色版游戏或程序。若不填此项，下载完成后，用户双击此任务，将打开下载文件所在的文件夹】
             runParams: '',  // 指定打开安装程序或主程序时的启动参数【视需求填写】
@@ -188,8 +192,8 @@
                 startIn: '', // 起始位置[选填]
             },
             threadCount: '5', // 指定原始地址线程数【一般不必填写，但某些下载地址的服务器会限制单个IP的最大同时连接数，例如部分“网盘、在线视频”网站等，此时可将此项数值设为1，从而避免被服务器断开连接】
-            hideYunPan: '1', // 是否隐藏下载到云盘入口
-            referer: '', // 指定迅雷发起下载请求时上报的引用页【一般不必填写，除非某些下载地址的服务器会判断引用页】
+            hideYunPan: '', // 是否隐藏下载到云盘入口
+            referer: 'http://www.cdssxy.com/', // 指定迅雷发起下载请求时上报的引用页【一般不必填写，除非某些下载地址的服务器会判断引用页】
             userAgent: '', // 指定迅雷发起下载请求时上报的UA【一般不必填写，除非某些下载地址的服务器会判断UA】
             tasks: info
         })
