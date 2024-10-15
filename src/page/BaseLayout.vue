@@ -1,6 +1,12 @@
 <template>
   <div style="display: flex;flex-direction: column;align-items:center; justify-content:center;margin-top: 20px">
     <el-form :model="form" label-width="120px">
+      <el-form-item label="教师认证">
+        <el-input
+            v-model="token"
+            placeholder="可为空 若需认证请联系作者"
+        ></el-input>
+      </el-form-item>
       <el-form-item label="前置条件">
         <el-cascader
             placeholder="阶段/科目/年级"
@@ -83,11 +89,10 @@
 
 </style>
 <script lang="ts" setup>
-import {onMounted, reactive, Ref, ref, UnwrapRef, watch} from 'vue'
+import {onMounted, Ref, ref} from 'vue'
 import axios from "axios";
-import {Action, CascaderProps, ElLoading, ElMessage, ElMessageBox, ElNotification} from "element-plus";
-import {assert} from "@vueuse/shared";
-import {Delete, Download} from "@element-plus/icons-vue";
+import {CascaderProps, ElLoading, ElMessageBox, ElNotification} from "element-plus";
+import {Download} from "@element-plus/icons-vue";
 
 onMounted(() => {
   ElMessageBox.alert(
@@ -139,6 +144,7 @@ onMounted(() => {
         confirmButtonText: '我同意',
       })
 })
+
 type formData = {
   gradeTypeId: number | null,
   subjectId: number | null,
@@ -147,6 +153,7 @@ type formData = {
   entranceYearId: number | null,
   term: number | null,
 }
+const token = ref('')
 const videosSelection = ref([])
 const pptsSelection = ref([])
 const videos = ref([])
@@ -275,6 +282,10 @@ const loadEntranceYears = async (gradeTypeId: number, subjectId: number, gradeId
     subjectId: subjectId,
     gradeId: gradeId,
     studyGroupId: studyGroupId
+  },{
+    headers:{
+      "Authorization":token.value
+    }
   })
   return result.data.data
 }
