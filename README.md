@@ -1,8 +1,8 @@
 # 这里是打包后的代码，便于github托管。查看源码请移步dev分支
 
-# 浏览本程序：http://www.yangsf.vip
+# 浏览本程序：[https://ly220214.github.io/](https://ly220214.github.io/)
 
-# 注：只能使用http，若是https则无法使用
+# 注：必须设置允许该网站允许不安全内容，具体设置方法参考 [https://www.cnblogs.com/chinasoft/p/18008884](https://www.cnblogs.com/chinasoft/p/18008884)
 
 # 注：有机率出现无法调用迅雷下载的问题，这是浏览器的策略
 
